@@ -1,3 +1,4 @@
+// 重建二叉树
 // 传入前序遍历和中序遍历，生成对应的二叉树
 function TreeNode(x) {
     this.val = x;
