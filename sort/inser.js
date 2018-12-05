@@ -62,6 +62,59 @@ function Binary_Search (arr, x) {
 }
 console.log(sort3([1,2,3,4,5,6,21,2,1,5,6]))
 // 实现方式 4 - 改进 （使用链表）函数方式实现
-function sort4 (arr) {
-  
+
+// 链表数据结构
+function createNode(value) {
+  return {
+    value,
+    next: null,
+  }
 }
+// 创建链表
+function createList(arr) {
+  const value = arr.shift();
+  if (value === undefined) {
+    return undefined;
+  }
+  const node = createNode(value);
+  node.next = createList(arr);
+  return node;
+}
+// 打印链表
+function printList(head) {
+  const arr = [];
+  while(head) {
+    arr.push(head.value);
+    head = head.next;
+  }
+  return arr;
+}
+// 迭代实现链表插入
+function insert(list, node) {
+  if(!list) return node;
+  const head = list;
+  if(head.value > node.value) {
+    node.next = list;
+    return node;
+  } else {
+    const secondHead = head.next;
+    head.next = insert(secondHead, node);
+    return head;
+  }
+}
+// 实现插入数据
+function insert4(list) {
+  let head = list;
+  let p = head.next;
+  head.next = null;
+  while(p) {
+    const node = p;
+    p = node.next;
+    node.next = null;
+    head = insert(head, node);
+  }
+  return head;
+}
+printList(insert4(createList([2,3,4,1,7,3,1,8,1])))
+// printList(insert(createList([0]), createNode(3)))
+
