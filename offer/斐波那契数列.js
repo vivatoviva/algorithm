@@ -26,4 +26,5 @@ function Fibonacci(n) {
   }
   return i;
 }
-console.log(Fibonacci(100))
+console.log(Fibonacci(100));
+
