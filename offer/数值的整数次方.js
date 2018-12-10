@@ -25,7 +25,7 @@ function Power2(base, exponent) {
   return num;
 }
 
-// 推荐这篇文章： https://www.jianshu.com/p/a353cafa5a07
+// 推荐这篇文章： https://zhuanlan.zhihu.com/p/42639682
 // 快速幂
 function Power3(base, exponent) {
   const isAdd = exponent < 0;
@@ -42,4 +42,12 @@ function Power3(base, exponent) {
   }
   return !isAdd ? result : 1 / result;
 }
+
+
 console.log(Power3(2,10))
+
+// 矩阵快速幂
+
+function Power4() {
+
+}
