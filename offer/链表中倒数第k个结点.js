@@ -5,6 +5,7 @@ function ListNode(x){
 function FindKthToTail(head, k)
 {
     // write code here
+    // 判断k值和head的有效性
     if(!head || k <= 0) return;
     let p = head; // 执行前面第k个节点；
     let i = 1;

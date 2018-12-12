@@ -37,5 +37,5 @@ function jumpFloor(number) {
   }
   return j;
 }
-console.log(jumpFloor(3));
+console.log(jumpFloor(4));
 
