@@ -2,6 +2,7 @@
     this.val = x;
     this.next = null;
 }*/
+
 // 同步思路实现
 function Merge(pHead1, pHead2)
 {
