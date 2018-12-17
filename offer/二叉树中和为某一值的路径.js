@@ -13,7 +13,7 @@ function FindPath(root, expectNumber)
         beforePath.push(node.val);
         const sum = getSum(beforePath);
         if(sum > expectNumber  ) return;
-        if(sum === expectNumber) return result.push(beforePath);
+        if(sum === expectNumber && !node.left && !node.right) return result.push(beforePath);
         
         if (node.left) find(node.left, ...beforePath);
         if (node.right) find(node.right, ...beforePath);
