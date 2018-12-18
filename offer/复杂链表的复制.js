@@ -4,6 +4,13 @@ function RandomListNode(x){
     this.random = null;
 }
 // 方法一
+
+/* 
+    算法分为两部分
+    1.根据next复制节点，新节点的random指向原节点，并且将原节点的next指向新生成的节点
+    2.根据第一步，通过遍历新链表，来找到random真正指向的位置
+    缺点： 或破坏原节点的值
+*/
 function Clone(pHead)
 {
     // 构建列表
@@ -36,9 +43,48 @@ node1.next = node2;
 node1.random = node2;
 node2.random = node1;
 const node = Clone(node1);
-console.log(node.next.random === node)
+console.log(node)
 
 // 方法二
-// function Clone() {
+function Clone(pHead) {
+    let head = pHead;
+    // 首先复制节点
+    while(pHead) {
+        const node = new RandomListNode(pHead.label);
+        node.next = pHead.next;
+        pHead.next = node;
+        pHead = node.next;
+    }
+    pHead = head;
+    // 将绑定random值
+    while(pHead && pHead.next) {
+        const nextNode = pHead.next;
+        nextNode.random = pHead.random.next;
+        pHead = nextNode.next;
+    }
 
-// }
+    pHead = head;
+    head = new RandomListNode(0); // 头结点
+    let pItem = head;
+    // 将新旧链表拆分
+    while(pHead.next) {
+        pItem.next = pHead.next;
+        pHead.next = pHead.next.next;
+        pItem = pItem.next;
+    }
+    head = head.next;
+    return head;
+}
+
+function getNext(node) {
+    while(node) {
+        console.log(node.label);
+        node = node.next;
+    }
+}
+function getRandom(node) {
+    while(node) {
+        console.log(node.random.label);
+        node = node.next;
+    }
+}
