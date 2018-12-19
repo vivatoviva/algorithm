@@ -116,5 +116,13 @@ function insert4(list) {
   return head;
 }
 printList(insert4(createList([2,3,4,1,7,3,1,8,1])))
-// printList(insert(createList([0]), createNode(3)))
 
+// 实现方式 5 - 改进 （使用索引链表）
+
+function indexInsert(arr, next, i) {
+   
+}
+function sort() {
+  
+}
+// 实现方式 6 - 改进 （二叉排序树）

@@ -39,7 +39,6 @@ function sortString(arr,sortTmp){
         result.push(sortTmp);
     }else{
         var isRepeated = {};
-        console.log(arr, sortTmp)
         for(var i = 0; i < arr.length; i++){
             if(!isRepeated[arr[i]]){
                 var p = arr.splice(i,1)[0];
