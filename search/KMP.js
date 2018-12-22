@@ -1,4 +1,5 @@
 // 使用KMP算法来搜索字符串
+// https://www.bilibili.com/video/av16828557?spm_id_from=333.338.b_7265636f6d6d656e645f7265706f7274.1
 function create_prefix(arr) {
   let i = 1;
   let len = 0;
