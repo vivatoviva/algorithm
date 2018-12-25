@@ -41,4 +41,24 @@ function getOrder(numbers, sign) {
   return result;
 }
 
-console.log(PrintMinNumber([3,32,321], 0))
+
+/*
+  牛客网实现思路
+  就是制定排序规则，然后按照规则进行排序，这样下载获得数组构成的数组最下
+  * 若ab > ba 则 a > b，
+  * 若ab < ba 则 a < b，
+  * 若ab = ba 则 a = b；
+*/
+function PrintMinNumber1(numbers)
+{
+    numbers.sort(function(a,b){
+        var s1=`${a}${b}`;
+        var s2= `${b}${a}`;
+        return s1-s2;
+    })
+    var result="";
+    numbers.map(function(num){
+        result=result.concat(num)
+    })
+    return result;
+}
