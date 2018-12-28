@@ -25,52 +25,122 @@
 
 // 不使用迭代的方式，使用你逆向求解
 
-const solve = function (arr, K ,B) {
-  // 维护一个三维数组记录数据, 表示当前处于数组第i个元素是，在剩余K个值的时候，位置为B时候能够获得的最大乘积
-  const result = [[[]]]; 
+// var n = parseInt(readline()),
+//     line2 = readline().split(" "),
+//     line3 = readline().split(" ");
 
-  for(let i = 0; i < arr.length; i++) {
-    for(let k = 0; k <= K; k++) {
-      for(let b = 0; b <= B; b++) {
-        // 初始化数组
-        if (!result[i]) {
-          result.push([])
-        }
-        if(!result[i][k]) {
-          result[i].push([])
-        }
-        if(!result[i][k][b]) {
-          result[i][k].push([]);
-        }
 
-        if(k === 0) {
-          // 如果是第一行
-          result[i][k][b] = 1;
-          continue;
-        }
-        // 如果选择的时候，当前靠近人数为0
-        if(b === 0) {
-          if(i === 0) {
-            // 如果是第一行
-            result[i][k][b] = 1;
-          } else {
-            // 如果不是第一行,只能不选择
-            result[i][k][b] = result[i - 1][k][B];
-          }
-          continue;
-        }
-        if(k > 0 && i === 0) {
-          result[i][k][b] = arr[i];
-          continue;
-        }
-        // 根据迭代原因，选择其中一项        
-        result[i][k][b] = Math.max(result[i-1][k - 1][b - 1] * arr[i], result[i - 1][k - 1][B]);
+// const solve = function (arr, K ,B) {
+//   // 维护一个三维数组记录数据, 表示当前处于数组第i个元素是，在剩余K个值的时候，位置为B时候能够获得的最大乘积
+//   const result = [[[]]]; 
+//   // 同时还需要维护一个负数数组
+//   const resultOdd = [[[]]];
+
+//   for(let i = 0; i < arr.length; i++) {
+//     for(let k = 0; k <= K; k++) {
+//       for(let b = 0; b <= B; b++) {
+//         // 初始化数组
+//         if (!result[i]) {
+//           result.push([])
+//           resultOdd.push([])
+//         }
+//         if(!result[i][k]) {
+//           result[i].push([])
+//           resultOdd[i].push([])
+//         }
+//         if(!result[i][k][b]) {
+//           result[i][k].push([]);
+//           resultOdd[i][k].push([]);
+//         }
+
+//         if(k === 0) {
+//           // 如果是第一行
+//           result[i][k][b] = 1;
+//           resultOdd[i][k][b] = 1;
+//           continue;
+//         }
+//         // 如果选择的时候，当前靠近人数为0
+//         if(b === 0) {
+//           if(i === 0) {
+//             // 如果是第一行
+//             result[i][k][b] = 1;
+//             resultOdd[i][k][b] = 1;
+//           } else {
+//             // 如果不是第一行,只能不选择
+//             result[i][k][b] = result[i - 1][k][B];
+//             resultOdd[i][k][b] = resultOdd[i - 1][k][B];
+//           }
+//           continue;
+//         }
+//         if(k > 0 && i === 0) {
+//           if (arr[i] > 0) {
+//             result[i][k][b] = arr[i];
+//             resultOdd[i][k][b] = 1;
+//           } else if (arr[i] < 0) {
+//             result[i][k][b] = 1;
+//             resultOdd[i][k][b] = arr[i]
+//           } else {
+//             result[i][k][b] = 1;
+//             resultOdd[i][k][b] = 1;
+//           }
+//           continue;
+//         }
+//         // 根据迭代原因，选择其中一项
+//         const result1 = result[i-1][k - 1][b - 1] * arr[i];
+//         const result2 = result[i - 1][k][B];
+//         const result3 = resultOdd[i-1][k - 1][b - 1] * arr[i];
+//         const result4 = resultOdd[i - 1][k][B];
+//         const Max = Math.max(result1, result2, result3, result4);
+//         const Min = Math.min(result1, result2, result3, result4);
+//         if (Max > 0) {
+//           result[i][k][b] = Max;
+//         } else {
+//           result[i][k][b] = 1;
+//         }
+//         if (Min < 0) {
+//           resultOdd[i][k][b] = Min;
+//         } else {
+//           resultOdd[i][k][b] = 1;
+//         }
+//       }
+//     }
+//   }
+
+//   return result[result.length - 1][K][B];
+// }
+
+// solve(line2, line3[0], line3[1])
+
+console.log(solve([7, -15, 31, 49, -44, 35, 44, -47, -23, 15, -11, 10, -21, 10, -13, 0, -20, -36, 22, -13, -39, -39, -31, -13, -27, -43, -6, 40, 5, -47, 35, -8, 24, -31, -24, -1], 3, 31));
+
+
+// 牛客网思路，
+function solve(arr, K, B) {
+  // 代表当选择K名学生时候，以第I位学生结尾的最大可能结果，最小可能结果
+  const fmax = [];
+  const fmin = [];
+
+  // 初始化数组
+  for(let i = 0; i <= K; i++) {
+    fmax[i] = [];
+    fmin[i] = [];
+    for(let j = 0; j < arr.length; j++) {
+      fmax[i][j] = 0;
+      fmin[i][j]= 0;
+    }
+  }
+  // 动态规划求解
+  for (let i = 0; i < arr.length; i++) {
+    fmax[1][i] = arr[i];
+    fmin[1][i] = arr[i];
+    for (let k = 2; k <=K; k++) {
+      for (let j = i-1 ; j >= 0 &&  i - j<=B ; j--) {
+        // j 代表前面第j个人
+        fmax[k][i] = Math.max(fmax[k][i], Math.max(fmax[k-1][j] * arr[i], fmin[k-1][j] * arr[i]));
+        fmin[k][i] = Math.min(fmin[k][i], Math.min(fmax[k-1][j] * arr[i], fmin[k-1][j] * arr[i]));
       }
     }
   }
-  console.log(result);
-
-  return result[result.length - 1][K][B];
+  // 最终结果
+  return Math.max(...fmax[fmax.length - 1]);
 }
-
-console.log(solve([10,2,3,4,5], 2, 1))
