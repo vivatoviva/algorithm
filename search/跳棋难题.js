@@ -1,4 +1,4 @@
-// 采用回溯思想进行迭代求解,保存每步的状态
+// 采用回溯思想进行迭代求解,保存每步的状态（深度优先KMP）
 
 function valid(situation, index) {
   const name = situation[index];

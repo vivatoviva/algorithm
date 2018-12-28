@@ -1,4 +1,4 @@
-// 判断皇后落子师傅合规
+// 判断皇后落子师傅合规(深度优先)
 function invalid(nowIndex, stack) {
     const len = stack.length + 1;// 当前层数
     for(let i = 1; i < len; i++) {
