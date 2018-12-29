@@ -24,3 +24,5 @@ function solve(arr) {
   }
   return min;
 }
+
+// 牛客网思想
