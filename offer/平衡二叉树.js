@@ -4,46 +4,53 @@ function TreeNode(x) {
     this.right = null;
 }
 
-// 使用递归的方式
+// 递归的方式求解（从上往下）
 function IsBalanced_Solution(pRoot)
 {
     // write code here
-    function isBalanced_left(root, max) {
-      if(!root) return true;
-      if (root.val > max) {
-        
-        return false;
-      }
-
-      if (root.left && root.left.val > root.val) {
-        return false;
-      }
-
-      if (root.right && (root.left.val < root.val || root.left.val > max)) {
-        return false;
-      }
-      return isBalanced_left(root.left, root.val) && isBalanced_right(root.right, root.val)
+    if(!pRoot) return true;
+    const leftDeep = deep(pRoot.left);
+    const rightDeep = deep(pRoot.right);
+    if (Math.abs(leftDeep - rightDeep) <= 1) {
+        // 判断左右子树是不是平衡二叉树
+        return IsBalanced_Solution(pRoot.left) && IsBalanced_Solution(pRoot.right);
     }
-    
-    function isBalanced_right(root, min) {
-      if(!root) return true;
-
-      if (root.val < min) {
-        return false;
+    return false;
+}
+function deep(pRoot) {
+    if(!pRoot) return 0;
+    let nodeList = [pRoot];
+    let templist = [];
+    let deep = 0;
+    while (nodeList.length) {
+      const node = nodeList.pop();
+      if (node.left) {
+        templist.push(node.left);
       }
-
-      if (root.left && root.left.val > root.val) {
-        return false;
+      if (node.right) {
+        templist.push(node.right);
       }
-
-      if (root.right && (root.left.val < root.val || root.left.val < min)) {
-        return false;
+      if (nodeList.length === 0) {
+        nodeList = [...templist];
+        templist = [];
+        deep++;
       }
-      return isBalanced_left(root.left, root.val) && isBalanced_right(root.right, root.val)
     }
-
-    return isBalanced_left(pRoot.left, pRoot.val) && isBalanced_right(pRoot.right, pRoot.val);
+    return deep;
 }
 
-const node = new TreeNode(1);
-console.log(IsBalanced_Solution(node))
+// 优化做法，不通过遍历深度来计算（从下往上）
+
+function IsBalanced_Solution(pRoot) {
+    return !!getDeep(pRoot);
+}
+function getDeep(pRoot) {
+    if (!pRoot) return 0;
+    const leftDeep = getDeep(pRoot.left);
+    const rightDeep = getDeep(pRoot.right);
+    if (leftDeep - rightDeep > 1) {
+        return false;
+    } else {
+        return 1 + Math.max(leftDeep, rightDeep);
+    }
+}
