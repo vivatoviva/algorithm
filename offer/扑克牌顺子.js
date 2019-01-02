@@ -1,3 +1,5 @@
+// （简单）
+
 function IsContinuous(numbers)
 {
     // write code here
