@@ -47,3 +47,28 @@ function deleteDuplication(pHead)
     }
     return newHead;
 }
+
+// 使用递归的方式实现
+
+function deleteDuplication(pHead) {
+  if (!pHead) {
+    return null;
+  }
+  if (pHead && !pHead.next) {
+    return pHead;
+  }
+         
+  let current;
+
+  if ( pHead.next.val == pHead.val){
+      current = pHead.next.next;
+      while (current != null && current.val==pHead.val) {
+        current=current.next;
+      }
+      return deleteDuplication(current);                     
+  } else {
+      current = pHead.next;
+      pHead.next = deleteDuplication(current);
+      return pHead;
+  } 
+}
