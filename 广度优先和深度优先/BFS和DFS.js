@@ -3,7 +3,7 @@
 // 无向图
 const graph = {
   'A': ['B', 'C'],
-  'B': ['A', 'C', 'D'],
+  'B': ['A', 'D', 'C'],
   'C': ['A', 'B', 'D', 'E'],
   'D': ['B', 'C', 'E', 'F'],
   'E': ['C', 'D'],
@@ -60,9 +60,65 @@ const BFS = (graph, startVertex, originalCallbacks) => {
   }
 }
 
-console.log(BFS(graph, 'A', {
+// console.log(BFS(graph, 'A', {
+//   enterVertex: ({ currentVertex }) => {
+//     console.log(currentVertex);
+//   }
+// }))
+
+/*
+    深度优先(depth-first-search)
+    递归实现
+*/
+
+const depthFirstSearchRecursive = (graph, currentVertex, previousVertex, callbacks) => {
+  callbacks.enterVertex({ currentVertex, previousVertex });
+
+  graph[currentVertex].forEach((nextVertex) => {
+    if (callbacks.allowTraversal({ previousVertex, currentVertex, nextVertex })) {
+      depthFirstSearchRecursive(graph, nextVertex, currentVertex, callbacks);
+    }
+  });
+
+  callbacks.leaveVertex({ currentVertex, previousVertex });
+}
+const DFSRecursive = (graph, startVertex, callbacks) => {
+  const previousVertex = null;
+  depthFirstSearchRecursive(graph, startVertex, previousVertex, initCallbacks(callbacks))
+}
+
+/*
+console.log(DFSRecursive(graph, 'A', {
   enterVertex: ({ currentVertex }) => {
     console.log(currentVertex);
   }
 }))
+*/
 
+
+const DFS = (graph, startVertex, originalCallbacks) => {
+  const callbacks = initCallbacks(originalCallbacks);
+  const vertexStack = [];
+  let previousVertex = null;
+  vertexStack.push(startVertex);
+
+  while(vertexStack.length) {
+    const currentVertex = vertexStack.pop();
+    callbacks.enterVertex({ currentVertex, previousVertex });
+
+    graph[currentVertex].forEach(nextVertex => {
+      if(callbacks.allowTraversal({ currentVertex, nextVertex, previousVertex })) {
+        vertexStack.push(nextVertex);
+      }
+    })
+
+    callbacks.leaveVertex({ currentVertex, previousVertex });
+    previousVertex = currentVertex;
+  }
+}
+
+console.log(DFS(graph, 'A', {
+  enterVertex: ({ currentVertex }) => {
+    console.log(currentVertex);
+  }
+}))
