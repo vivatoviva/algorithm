@@ -49,3 +49,28 @@ var multiply = function(num1, num2) {
 };
 
 console.log(multiply('9133', '10'));
+
+
+// leetcode提交的
+
+let multiply = function(num1, num2) {
+  const len1 = num1.length;
+  const len2 = num2.length;
+  let arr = new Array(len1 + len2).fill(0);
+  for (let i = 0; i < len1; ++i) {
+      for (let j = 0; j < len2; ++j) {
+          arr[len1 + len2 - i - j - 2] += (num1.charCodeAt(i) - 48) * (num2.charCodeAt(j) - 48);
+      }
+  }
+  let high = 0;
+  for (let i = 0; i < len1 + len2; ++i) {
+      arr[i + 1] += ~~(arr[i] / 10);
+      arr[i] = arr[i] % 10;
+      high = arr[i] > 0 ? i : high;
+  }
+  let res = "";
+  for (let i = high; i >= 0; --i) {
+      res += arr[i];
+  }
+  return res;
+};
