@@ -38,7 +38,7 @@ var generateMatrix = function(n) {
       result = rotateMatrix;
     }
 
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i <= n / 2; i++) {
       const layer = i; // 代表当前赋值层数
       rotate(result, layer);
       rotate(result, layer);
@@ -50,30 +50,32 @@ var generateMatrix = function(n) {
 
 console.log(generateMatrix(3));
 
-var generateMatrix = function(n) {
-  let result =  Array.from({length: n}, () => Array.from({length: n}));
-  n = n - 1;
-  let count = 1;
-  for (let i = 0; i <= n / 2; i++) {
-      // to Right;
-      if (i === n-i) {
-          result[i][i] = count;
-      }
-      for (let j = i; j < n-i; j++) {
-          result[i][j] = count++;
-      }
-      // to Bottom
-      for (let m = i; m < n - i; m ++) {
-          result[m][n - i] = count++;
-      }
-      // to Left
-      for (let p=n-i; p > i; p--) {
-          result[n - i][p] = count++;
-      }
-      // to Top
-      for (let q=n-i; q > i; q-- ) {
-          result[q][i] = count++;
-      }
-  }
-  return result;
-};
+// var generateMatrix = function(n) {
+//   // 初始化数组
+//   let result =  Array.from({length: n}, () => Array.from({length: n}));
+
+//   n = n - 1;
+//   let count = 1;
+//   for (let i = 0; i <= n / 2; i++) {
+//       // to Right;
+//       if (i === n-i) {
+//           result[i][i] = count;
+//       }
+//       for (let j = i; j < n-i; j++) {
+//           result[i][j] = count++;
+//       }
+//       // to Bottom
+//       for (let m = i; m < n - i; m ++) {
+//           result[m][n - i] = count++;
+//       }
+//       // to Left
+//       for (let p=n-i; p > i; p--) {
+//           result[n - i][p] = count++;
+//       }
+//       // to Top
+//       for (let q=n-i; q > i; q-- ) {
+//           result[q][i] = count++;
+//       }
+//   }
+//   return result;
+// };
