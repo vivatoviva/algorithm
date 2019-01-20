@@ -35,7 +35,8 @@ var maxProfit = function(prices) {
         }
         result[i] = profits;
     }
+    console.log(result);
     return result.pop();
 };
 
-console.log(maxProfit([7,1,5,3,6,4]));
+console.log(maxProfit([1,2,3,4,5]));
