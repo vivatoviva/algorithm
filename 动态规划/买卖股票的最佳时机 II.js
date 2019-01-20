@@ -24,7 +24,7 @@ var maxProfit = function(prices) {
         // 和所有路径对比得到最大值
         for (let j = 0; j < options.length; j++) {
             const [value, startIndex] = options[j];
-            const currentValue = value + result[startIndex - 1];
+            const currentValue = value + (result[startIndex - 1] || 0);
             if (currentValue > profits) {
                 profits = currentValue;
             }
@@ -35,7 +35,6 @@ var maxProfit = function(prices) {
         }
         result[i] = profits;
     }
-    console.log(result);
     return result.pop();
 };
 
