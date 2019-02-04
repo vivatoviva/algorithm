@@ -3,10 +3,12 @@
  * @description{O（1）时间复杂度内完成对应的操作}
  * @description {对应的数据结构是map}
  */
+// { key, value, next, last}
 var LRUCache = function(capacity) {
-    this.capacity = capacity; // 最大容量
-    this.currentCapacity = 0; // 当前使用次数
-    this.map = {};
+    this.maxCapcity = capacity; // 最大容量
+    this.head = null; // 指向链表头结点
+    this.hashMap = {}; // 作为hashMap的实现
+    this.currentCapcity = 0;
 };
 
 /** 
@@ -14,62 +16,86 @@ var LRUCache = function(capacity) {
  * @return {number}
  */
 LRUCache.prototype.get = function(key) {
-    // 检查缓存中的长度和是否存在这个缓存
-    if (!Object.keys(this.map).length || !this.map[key]) {
+    if (!this.hashMap[key]) {
         return -1;
     }
-    if (this.map[key]) {
-        const { use_time, value }  = this.map[key];
-        this.map[key] = {
-            value,
-            create_time: + new Date(),
-            use_time: use_time + 1,
-        }
+    // 将链表和hashMap结合起来处理
+    const { last , next } = this.hashMap[key];
+    if (last) {
+        last.next = next;
     }
-    return this.map[key].value;
+    if (next) {
+        next.last = last;
+    }
+    this.hashMap[key].last = null;
+    this.hashMap[key].next = null;
+    if (this.head !== this.hashMap[key]) {
+        this.hashMap[key].next = this.head;
+        this.head.last = this.hashMap[key];
+        this.head = this.hashMap[key];
+    }
+    return this.hashMap[key].value;
 };
 
 /** 
- * @param {number} key
+ * @param {number} key 
  * @param {number} value
  * @return {void}
  */
 LRUCache.prototype.put = function(key, value) {
-    if (this.currentCapacity > this.capacity && !this.map[key]) {
-        // 需要删除最近最少使用的数据
-        let minKey = '';
-        Object.keys(this.map).forEach(key => {
-            const { use_time, create_time } = this.map[key];
-            if (!minKey) {
-                minKey = key;
-            } else {
-                if (this.map[minKey].use_time <= use_time) {
-                    if (this.map[minKey].use_time == use_time) {
-                        // 对比时间
-                        if (this.map[minKey].create_time > create_time) {
-                            minKey = key
-                        }
-                    } else {
-                        minKey = key;
-                    }
-                }
-            }
-        })
-        this.map[minKey] = null;
+    if (this.hashMap[key]) {
+        // 重新设置
+        this.hashMap[key].value = value;
+        this.get(key);
+        return;
     }
-    if (!this.map[key]) {
-        this.currentCapacity += 1;
+    if (this.currentCapcity >= this.maxCapcity) {
+        // 删除老元素
+        let head = this.head;
+        while(head.next) {
+            head = head.next;
+        }
+        const { key, last, } = head;
+        this.hashMap[key] = null;
+        // 处理链表
+        if (last) {
+            last.next = null;
+        }
+        this.currentCapcity--;
     }
-    this.map[key] = {
+    // 增加新的元素
+    this.hashMap[key] = {
+        key,
         value,
-        create_time: +new Date(),
-        use_time: 1,
+        next: null,
+        last: null,
     }
+    this.hashMap[key].next = this.head;
+    if (this.head) {
+        this.head.last = this.hashMap[key];
+    }
+    this.head = this.hashMap[key];
+    this.currentCapcity++;
 };
 
-/** 
- * Your LRUCache object will be instantiated and called as such:
- * var obj = Object.create(LRUCache).createNew(capacity)
- * var param_1 = obj.get(key)
- * obj.put(key,value)
- */
+
+const cache = new LRUCache( 2 /* 缓存容量 */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+console.log(cache.get(1));       // 返回  1
+
+cache.put(3,3)
+// cache.put(3, 3);    // 该操作会使得密钥 2 作废
+// cache.get(2);       // 返回 -1 (未找到)
+console.log(cache.get(2));
+cache.put(4, 4);    // 该操作会使得密钥 1 作废
+console.log(cache.get(1));       // 返回 -1 (未找到)
+// cache.get(3);       // 返回  3
+// cache.get(4);       // 返回  4
+console.log(cache.get(3))
+console.log(cache.get(4));
+cache.put(1);
+cache.put(2,2);
+cache.put(3,3);
+console.log(cache.get(2))
