@@ -8,4 +8,5 @@ var canWinNim = function(n) {
 };
 var winNim = function (currentNum) {
   // 确定当前应该走多少步骤
+  return n % 4  != 0;
 }
